@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/analysis.css') }}" >
+<link href="https://fonts.googleapis.com/css?family=Limelight" rel="stylesheet">
+{% endblock %}
+
+{% block links %}
+<li id="upload"><a href="{{ url_for('upload') }}">UPLOAD</a></li>
+<li class="active" id="analysis"><a href="#">ANALYSIS</a></li>
+<li id="results"><a href="{{ url_for('results') }}">RESULTS</a></li>
+{% endblock %}
+
+{% block bodycontent %}
+    <div id="blinkDiv">
+        <h3>Blink Analysis</h3>
+        <canvas id="blinkChart" width="100%" height="30%"></canvas>
+    </div>
+
+    <div id="mExpDiv">
+        <h3>Micro Expression Analysis</h3>
+        <canvas id="mExpChart" width="100%" height="30%"></canvas>
+    </div>
+
+    <div id="energyDiv">
+        <h3>Voice Energy Analysis</h3>
+        <canvas id="energyChart" width="100%" height="30%"></canvas>
+    </div>
+
+    <div id="pitchDiv">
+        <h3>Voice Pitch Analysis</h3>
+        <canvas id="pitchChart" width="100%" height="30%"></canvas>
+    </div>
+
+    <div id="vowelDiv">
+        <h3>Vowel Duration Analysis</h3>
+        <canvas id="vowelChart" width="100%" height="30%"></canvas>
+    </div>
+
+    <div id="contourDiv">
+        <h3>Voice Pitch Contour Analysis</h3>
+        <canvas id="contourChart" width="100%" height="30%"></canvas>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+<script>
+$( () => {
+
+let blinkCtx = document.getElementById("blinkChart").getContext('2d');
+let mExpCtx = document.getElementById("mExpChart").getContext('2d');
+let energyCtx = document.getElementById("energyChart").getContext('2d');
+let pitchCtx = document.getElementById("pitchChart").getContext('2d');
+let vowelCtx = document.getElementById("vowelChart").getContext('2d');
+let contourCtx = document.getElementById("contourChart").getContext('2d');
+
+// Convert Data to JSON
+let blink_data = {{ blink_data|tojson }};
+let micro_expression = {{ microexpression_data|tojson }};
+let mean_energy = {{ mean_energy|tojson }};
+let max_pitch_amp = {{ max_pitch_amp|tojson }};
+let vowel_duration = {{ vowel_duration|tojson }};
+let pitch_contour = {{ pitch_contour|tojson }};
+
+// Convert JSON Data to ChartJS Scatter plot readable version
+// data = [{x: value, y: value}, ...]
+let micro_expression_graph_data = [{x: 0, y: 0}];
+let seconds = 2;
+for (let value of micro_expression) {
+    micro_expression_graph_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let blink_graph_data = [{x: 0, y: 0}];
+seconds = 2;
+for (let value of blink_data) {
+    blink_graph_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let mean_energy_data = [{x: 0, y: 0}];
+seconds = 2;
+for (let value of mean_energy){
+    mean_energy_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let max_pitch_amp_data = [{x: 0, y: 0}];
+seconds = 2;
+for (let value of max_pitch_amp){
+    max_pitch_amp_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let vowel_duration_data = [{x: 0, y: 0}];
+seconds = 2;
+for (let value of vowel_duration){
+    vowel_duration_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let pitch_contour_data = [{x: 0, y: 0}];
+seconds = 2;
+for (let value of pitch_contour){
+    pitch_contour_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+let blinkChart = new Chart(blinkCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Blinks',
+            data: blink_graph_data, //[{x: 3, y: 1}, {x: 5, y: 1}, {x: 6, y: 1}],
+            borderColor: 'rgba(100, 123, 211, 1)',
+            pointBackgroundColor: 'rgba(100, 123, 211, 1)',
+            pointRadius: 2
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Blinks/second'
+                },
+                ticks: {
+                    min: 0
+                    //max: 2
+                }
+            }]
+        },
+    }
+});
+
+let mExpChart = new Chart(mExpCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Micro Expressions',
+            data: micro_expression_graph_data, //[{x: 9, y: 2}, {x: 4, y: 2}, {x: 8, y: 2}],
+            borderColor: 'rgba(200, 123, 111, 1)',
+            pointBackgroundColor: 'rgba(200, 123, 111, 1)',
+            pointRadius: 2
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Micro Expression Status'
+                },
+                ticks: {
+                    min: 0,
+                    max: 2
+                }
+            }]
+        },
+    }
+});
+
+
+let energyChart = new Chart(energyCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Energy',
+            data: mean_energy_data, //[{x: 3, y: 1}, {x: 5, y: 1}, {x: 6, y: 1}],
+            borderColor: 'rgba(225, 0, 0, 1)',
+            pointBackgroundColor: 'rgba(225, 0, 0, 1)',
+            pointRadius: 2
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Acoustic Power (Watts)'
+                },
+                ticks: {
+                    min: 0,
+                    //max: 3
+                }
+            }]
+        },
+    }
+});
+
+let pitchChart = new Chart(pitchCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Max Pitch Amplitude',
+            data: max_pitch_amp_data, //[{x: 9, y: 2}, {x: 4, y: 2}, {x: 8, y: 2}],
+            borderColor: 'rgba(0, 255, 0, 1)',
+            pointBackgroundColor: 'rgba(0, 255, 0, 1)',
+            pointRadius: 2
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                        stepSize: 0.066,
+                      min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Amplitude (units)'
+                },
+                ticks: {
+                    min: 0,
+                    //max: 3
+                }
+            }]
+        },
+    }
+});
+
+let vowelChart = new Chart(vowelCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Vowel Duration',
+            data: vowel_duration_data, //[{x: 9, y: 2}, {x: 4, y: 2}, {x: 8, y: 2}],
+            borderColor: 'rgba(0, 0, 255, 1)',
+            pointBackgroundColor: 'rgba(0, 0, 255, 1)',
+            pointRadius: 2
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Vowel Duration (msec)'
+                },
+                ticks: {
+                    min: 0,
+                    //max: 3
+                }
+            }]
+        },
+    }
+});
+
+let contourChart = new Chart(contourCtx, {
+    type: 'line',
+    data: {
+        datasets: [
+        {
+            label: 'Pitch Contour',
+            data: pitch_contour_data, //[{x: 9, y: 2}, {x: 4, y: 2}, {x: 8, y: 2}],
+            borderColor: 'rgba(210, 83, 99, 1)',
+            pointBackgroundColor: 'rgba(210, 83, 99, 1)',
+            pointRadius: 2
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Fundamental Freq (Hz)'
+                },
+                ticks: {
+                    min: 0,
+                    //max: 3
+                }
+            }]
+        },
+    }
+});
+
+});
+</script>
+
+{% endblock %}

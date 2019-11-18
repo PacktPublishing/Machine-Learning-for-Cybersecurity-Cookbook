@@ -1,0 +1,39 @@
+body {
+    background: rgb(247, 247, 247);
+}
+
+#blinkDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}
+
+#mExpDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}
+
+#energyDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}
+
+#pitchDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}
+
+#vowelDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}
+
+#contourDiv {
+    margin: 20px 20px 0 20px;
+    color: #0d47a1;
+    font-family: 'Limelight', cursive;
+}

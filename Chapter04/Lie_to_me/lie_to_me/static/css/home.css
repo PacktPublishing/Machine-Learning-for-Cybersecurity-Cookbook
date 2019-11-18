@@ -1,0 +1,117 @@
+body {
+    font-family: 'Open sans', sans-serif;
+}
+#video_canvas {
+    background-color: #E9E9E9;
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+#dummy_space {
+    background-color: white;
+    width: 640px;
+    height: 480px;
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+#canvas-wrap { 
+    position:relative
+} 
+
+.overlay_2 { 
+    position:absolute; 
+    top:-28px;
+    left:16px;
+}
+
+#video_canvas {
+    width: 640px;
+    height: 480px;
+}
+
+video {
+    visibility: hidden;
+    width: 640px;
+    height: 480px;
+}
+
+.overlay { 
+    position:absolute; 
+    top:220px; 
+    left:280px; 
+}
+
+.dim_overlay {
+  display: none;
+  background:#000;
+  opacity: 0.7;
+  position:fixed;
+  top:0; left:0;
+  width:100%;
+  height:100%;
+  z-index:10;
+}
+
+.progress {
+    display: none;
+    top: 50%;
+    left: 25%;
+    width: 50%;
+    z-index: 20;
+}
+
+.dim_loading_overlay {
+    display: none;
+    margin-top: 30%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;
+    color: white;
+    z-index: 20;
+}
+
+.overlay p{
+    color: #0d47a1;
+}
+
+#uploading {
+    text-align: center;
+    line-height: 10px;
+}
+
+#progressBarDiv {
+    display: none;
+}
+
+.constraint {
+    margin-top: 30px;
+}
+
+  /* label color */
+  .input-field label {
+    color: #FFF;
+  }
+  /* label focus color */
+  .input-field input[type=text]:focus + label {
+    color: #FFF;
+  }
+  /* label underline focus color */
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #FFF;
+    box-shadow: 0 1px 0 0 #FFF;
+  }
+  /* valid color */
+  .input-field input[type=text].valid {
+    border-bottom: 1px solid #FFF;
+    box-shadow: 0 1px 0 0 #FFF;
+  }
+  /* invalid color */
+  .input-field input[type=text].invalid {
+    border-bottom: 1px solid #FFF;
+    box-shadow: 0 1px 0 0 #FFF;
+  }
+  /* icon prefix focus color */
+  .input-field .prefix.active {
+    color: #FFF;
+  }

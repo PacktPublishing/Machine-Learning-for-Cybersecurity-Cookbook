@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/results.css') }}" >
+<link href="https://fonts.googleapis.com/css?family=Limelight" rel="stylesheet">
+{% endblock %}
+
+{% block links %}
+<li id="upload"><a href="{{ url_for('upload') }}">UPLOAD</a></li>
+<li id="analysis"><a href="{{ url_for('analysis') }}">ANALYSIS</a></li>
+<li id="results" class="active"><a href="#">RESULTS</a></li>
+{% endblock %}
+
+{% block bodycontent %}
+    <div class="row">
+
+        <div class="col s12">
+            <div id="lieDiv">
+                <h3>Lie Detection Analysis</h3>
+                <canvas id="timeLineCanvas" width="100%" height="30%"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+    <div class="row">
+
+        <div class="col s8">
+            <div class="video">
+                <video id="video" src="{{ video_src }}" controls></video>
+            </div>
+        </div>
+
+        <div class="col s4">
+          <div class="card teal darken-2">
+            <div class="card-content white-text">
+              <span class="card-title">Lie Detection Results</span>
+                <p>Total Lies Detected: {{ lie_results.count(1) }}</p>
+                <ol>
+                    {% for value in lie_timestamps %}
+                        <li>{{ value[0] }} - {{ value[1] }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+          </div>
+        </div>
+
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+<script>
+$( () => {
+
+let lieCtx = document.getElementById("timeLineCanvas").getContext('2d');
+
+// Convert Lie Data to JSON
+let lie_data = {{ lie_results|tojson }};
+
+
+// Convert the Data to Graph
+let lie_results_graph_data = [];
+let seconds = 0;
+for (let value of lie_data) {
+    lie_results_graph_data.push({x: seconds/60.0, y: value});
+    seconds += 2;
+}
+
+
+let lieChart = new Chart(lieCtx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Truth/Lie TimeLine',
+            data: lie_results_graph_data, //[{x: 3, y: 1}, {x: 5, y: 1}, {x: 6, y: 1}],
+            borderColor: 'rgba(36, 78, 153, 1)',
+            pointBackgroundColor: 'rgba(36, 78, 153, 1)',
+            pointRadius: 1,
+            steppedLine: true
+        }
+        ]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom',
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Time (Minutes)'
+                },
+                ticks: {
+                    stepSize: 0.066,
+                    min: 0
+                    //max: 10
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    fontSize: 20,
+                    labelString: 'Truth/Lie Detections'
+                },
+                ticks: {
+                    min: 0,
+                    max: 2,
+                    stepSize: 1
+                }
+            }]
+        },
+    }
+});
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}" >
+{% endblock %}
+
+{% block links %}
+<li class="active" id="upload"><a href="#">UPLOAD</a></li>
+<li id="analysis"><a href="{{ url_for('analysis') }}">ANALYSIS</a></li>
+<li id="results"><a href="{{ url_for('results') }}">RESULTS</a></li>
+{% endblock %}
+
+{% block bodycontent %}
+<div class="container">
+<div class="dim_overlay">
+  <div class="progress">
+      <div class="indeterminate"></div>
+  </div>
+        <h5 class="dim_loading_overlay">LOADING MODULES</h5>
+</div>
+
+<div class="row">
+    <div class="canvas_wrap col s7">
+        <div id="canvas-wrap">
+            <canvas id="video_canvas" style="display: none"></canvas>
+            <div id="dummy_space"></div>
+            <canvas id="dummy_canvas" width="1024" height="768" style="display: none"></canvas> 
+            <div class="overlay_2">
+                <video id="video" controls></video>
+            </div>
+            <div class="overlay">
+                {% include "loading.html" %}
+                <p id="loadingMsg">LOADING...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="constraint col s4 offset-s1">
+        <div class="card">
+            <div class="card-image">
+                <img src="https://usercontent2.hubstatic.com/9159101_f520.jpg">
+                <span class="card-title" style="color: black"><strong>ABOUT</strong></span>
+            </div>
+            <div class="card-content">
+                <p>Lie To Me uses innovative analysis of involuntary facial expressions and speech to detect attempts
+                   at deception via a trained Machine learning model</p><br><br>
+
+                <p>&copy; 2018 Capstone Ducks</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div id="uploadFormDiv" class="col s6">
+        <form id="videoForm" method=post enctype=multipart/form-data>
+        <div class="file-field input-field">
+            <div class="btn disabled">
+                <span>Upload</span>
+                <input id="fileItem" type="file" name="file" accept="video/*">
+            </div>
+            <div class="file-path-wrapper">
+                <input disabled class="file-path validate" type="text">
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <div id="progressBarDiv" class="col s6">
+        <div class="progress">
+            <div class="determinate" style="width: 0%"></div>
+        </div>
+        <p id="uploading">UPLOADING: <span id="uploadValue">0%</span></p>
+    </div>
+
+    <div class="results col s3 offset-s3">
+        <button class="btn-large waves-effect waves-light disabled" onclick="beginAnalysis()">Analyze<i class="material-icons right">sync</i></button>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="https://download.affectiva.com/js/3.2/affdex.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script src= {{ url_for('static', filename='js/analyze.js')}} ></script>
+    <script src= {{ url_for('static', filename='js/affectiva.js')}} ></script>
+{% endblock %}
