@@ -1,0 +1,1 @@
+The DA Benign and DA Malware logs are "over 4000 malicious apps dynamically analyzed on LG Nexus 5 device farm (API 23)" and “over 4300 benign apps dynamically analyzed on LG Nexus 5 device farm (API 23)” by goorax, used under CC BY / Unmodified from original
