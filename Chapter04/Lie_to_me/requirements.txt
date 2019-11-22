@@ -34,7 +34,7 @@ python-dateutil==2.7.0
 python-engineio==2.0.2
 python-socketio==1.8.4
 pytz==2018.3
-rope==0.10.7
+rope==0.11.0
 scikit-learn
 scipy
 simplegeneric==0.8.1
