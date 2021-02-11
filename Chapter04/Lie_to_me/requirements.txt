@@ -31,7 +31,7 @@ Pygments==2.2.0
 pylint==1.8.2
 pyparsing==2.2.0
 python-dateutil==2.7.0
-python-engineio==2.0.2
+python-engineio==3.8.2.post1
 python-socketio==1.8.4
 pytz==2018.3
 rope==0.10.7
