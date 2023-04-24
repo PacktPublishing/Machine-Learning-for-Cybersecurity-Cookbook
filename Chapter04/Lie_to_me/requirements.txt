@@ -42,6 +42,6 @@ six==1.11.0
 sklearn
 traitlets==4.3.2
 wcwidth==0.1.7
-websockets==4.0.1
+websockets==9.1
 Werkzeug==0.14.1
 wrapt==1.10.11
