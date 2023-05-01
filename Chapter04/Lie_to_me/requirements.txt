@@ -4,7 +4,7 @@ click==6.7
 colorama==0.3.9
 cycler==0.10.0
 decorator==4.2.1
-Flask==0.12.2
+Flask==2.3.2
 Flask-JSGlue==0.3.1
 Flask-SocketIO==2.9.4
 Flask-Uploads==0.2.1
